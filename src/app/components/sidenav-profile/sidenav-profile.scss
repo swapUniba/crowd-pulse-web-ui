@@ -1,0 +1,12 @@
+.md-subheader.with-flex-md-subheader-content {
+
+  .md-subheader-content {
+    display: flex;
+    flex-direction: row;
+
+    p.flex {
+      margin: auto;
+    }
+
+  }
+}

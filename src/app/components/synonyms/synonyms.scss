@@ -1,0 +1,22 @@
+.synonym-item {
+  box-sizing: border-box;
+  padding: 8px;
+
+  md-whiteframe {
+    background: #f0f0f0;
+    border-radius: 3px;
+
+    h4, p {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow-x: hidden;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+}
+
+p.synonym-error {
+  margin-top: 0;
+}

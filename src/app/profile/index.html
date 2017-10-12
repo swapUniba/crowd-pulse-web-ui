@@ -1,0 +1,83 @@
+<sidenav-profile id="sidenav-profile" layout="column" ></sidenav-profile>
+<div flex layout="column"> 
+    
+    <md-content class="md-padding" layout-xs="column" layout="column">
+        <p>User: {{user.displayName}}</p>
+        <md-card class="facebook"  md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch ng-if="user.facebook">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Profilo Facebook</span>
+                <div class="user_value" ng-repeat="(key, value) in filter(user.facebook)">
+                    <span ><b>{{key}}</b> : <div ng-bind-html="value"></div></span>
+                </div>
+                <br>
+                <br>
+                <div class="face_posts" ng-show="showPosts">
+                    <span class="md-headline">Messages</span>
+                    <div  ng-repeat="(key, value) in face_posts">
+                        <span><b>Message</b> : {{value.text}}</span>
+                    </div>
+                </div>
+                <div class="face_posts" ng-show="showLikes">
+                    <span class="md-headline">Likes</span>
+                    <div  ng-repeat="(key, value) in face_likes">
+                        <span><b>Likes</b> : {{value.text}}</span>
+                    </div>
+                </div>
+              </md-card-title-text>
+              <md-card-title-media>
+                <div class="md-media-lg card-media">
+                    <img class="md-user-avatar" src="{{user.facebook.picture}}">
+                </div>
+              </md-card-title-media>
+            </md-card-title>
+            <md-card-actions layout-align="start center">
+              <md-button ng-click="toggleFacePosts(showPosts)">Messages</md-button>
+              <md-button ng-click="toggleFaceLikes(showLikes)">Likes</md-button>
+            </md-card-actions>
+      </md-card>  
+      <md-card class="twitter"  md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch ng-if="user.twitter"> 
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Profilo Twitter</span>
+            <div class="user_value" ng-repeat="(key, value) in filter(user.twitter)">
+                <span><b>{{key}}</b> : <div ng-bind-html="value"></div></span>
+            </div>
+              <br>
+              <br>
+            <div class="tweets" ng-show="showTweets">
+                <span class="md-headline">Messages</span>
+                <div  ng-repeat="(key, value) in tweets">
+                    <span><b>Message</b> : {{value.text}}</span>
+                </div>
+            </div>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-lg card-media">
+                <img class="md-user-avatar" src="{{user.twitter.picture}}">
+            </div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-actions layout-align="start center">
+          <md-button ng-click="toggleTwitter(showTweets)">Messages</md-button>
+        </md-card-actions>
+        </md-card>     
+
+        <md-card class="linkedin" md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch ng-if="user.linkedin">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Profilo Linkedin</span>
+            <div class="user_value" ng-repeat="(key, value) in filter(user.linkedin)">
+                <span><b>{{key}}</b> : <div ng-bind-html="value"></div></span>
+            </div>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-lg card-media">
+                <img class="md-user-avatar" src="{{user.linkedin.picture}}">
+            </div>
+          </md-card-title-media>
+        </md-card-title>
+      </md-card>
+    </md-content>
+</div>
+
