@@ -2,12 +2,13 @@
 <html ng-app="webUi">
   <head>
     <meta charset="utf-8">
-    <!--TODO: inject application title -->
+    <!--T ODO: inject application title -->
     <title>webUi</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      
     <!-- build:css({.tmp/serve,src}) styles/vendor.css -->
     <!-- bower:css -->
     <!-- run `gulp inject` to automatically populate bower styles dependencies -->
@@ -29,17 +30,19 @@
 
     <div id="main-inject" ui-view flex layout="row"></div>
 
-    <!-- build:js(src) scripts/vendor.js-->
+    <!-- build:js(src) scripts/vendor.js -->
     <script src="../bower_components/jquery/dist/jquery.js"></script>
 
     <script src="../bower_components/angular/angular.js"></script>
     <script src="../bower_components/satellizer/dist/satellizer.js"></script>
 
-    <script src="../bower_components/leaflet/dist/leaflet.js"></script>
+    <script src="../bower_components/leaflet/leaflet.js"></script> <!--TODO change the leaflet version with > 1.2.0 when released -->
     <script src="../bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
-
+    
     <script src="../node_modules/leaflet.heat/dist/leaflet-heat.js"></script>
-
+    <script src="../node_modules/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script src="../node_modules/leaflet-search/dist/leaflet-search.src.js"></script>
+      
     <!-- bower:js -->
     <!-- run `gulp inject` to automatically populate bower script dependencies -->
     <!-- endbower -->

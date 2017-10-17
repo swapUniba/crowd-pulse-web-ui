@@ -7,17 +7,17 @@
 
   /* global Highcharts:false */
   /** @ngInject */
-  function ViewIndexController($mdSidenav, $cookies, $state, $mdDialog, $scope, $timeout, $window, $q, $http, Stat, config) {
+  function ViewIndexController($mdSidenav, $cookies, $state, $mdDialog, $scope, $timeout, $window, $q, $http, Stat, config, leafletData) {
     var vm = this;
 
     vm.params = {};
-
+    
     $scope.center = {
         lat: 41.60722821271717,
         lng: 13.348388671875,
         zoom: 6
     }
-
+    
     $scope.layers = {
         baselayers: {
             osm: {
@@ -25,11 +25,12 @@
                 url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 type: 'xyz'
             }
-        }
+        },
+        overlays: {}
     };
-
-
-    // CHART BUILDERS
+    $scope.controls = {};
+      
+      // CHART BUILDERS
 
     var buildBaseHighcharts = function(type) {
       return {
@@ -155,7 +156,7 @@
       }];
       return chart;
     };
-
+      
     var buildPieChartSentiment = function(title, values) {
       var chart = buildBaseHighcharts('pie');
       chart.tooltip = {
@@ -191,8 +192,8 @@
       }];
       return chart;
     };
-
-
+      
+      
     var buildBarChart = function(xTitle, xValues, yTitle, yValues) {
       var chart = buildBaseHighcharts('bar');
       chart.tooltip = {
@@ -332,12 +333,12 @@
 	}
       }];
       return chart;
-    };
-
-
-
-
-
+    };  
+      
+      
+      
+      
+      
 
 
     var buildTimelineChart = function(title, series) {
@@ -371,38 +372,84 @@
       chart.series = series;
       return chart;
     };
-
-
-
+      
+      
+      
+    $http.get("../app/json/region.json").success(function(data, status) {
+        angular.extend($scope.layers.overlays, {
+            countries: {
+                name:'Italian region',
+                type: 'geoJSONShape',
+                data: data,
+                visible: true,
+                layerOptions: {
+                    style: {
+                            color: '#00D',
+                            fillColor: 'red',
+                            weight: 2.0,
+                            opacity: 0.6,
+                            fillOpacity: 0.2
+                    }
+                }
+            },
+            search: {
+                name: 'Search',
+                type: 'group',
+                visible: true,
+            }
+        });
+        leafletData.getLayers().then(function(baselayers) {
+           console.log(baselayers.overlays.search);
+           $scope.controls = {
+               search: {
+                   layer: baselayers.overlays.search,
+                   zoom: 20
+               }
+           };
+        });
+    });     
+      
+      
     var buildMapChart = function(points) {
-
-
+        
         var markers = [];
-
         var heatMap = [];
-
+        
         for(var i = 0; i < points.length; i++){
             var mark = {
                     lat: points[i].latitude,
                     lng: points[i].longitude,
                     focus: true,
+                    title: points[i].text,
                     message: points[i].text,
-                    draggable: false
+                    layer: 'search',
+                    draggable: false,
                 };
-
+            
+             var mark2 = {
+                    lat: points[i].latitude,
+                    lng: points[i].longitude,
+                    focus: true,
+                    message: points[i].text,
+                    layer: 'cluster',
+                    draggable: false,
+                };
+            
+            
             var heatPoint = [
                         points[i].latitude,
                         points[i].longitude,
                         "1500"
                     ];
-
+            
+            
             markers.push(mark);
+            markers.push(mark2);
             heatMap.push(heatPoint);
-
+            
         }
-        console.log(heatMap);
-
-        $scope.layers.overlays = {
+        
+         angular.extend($scope.layers.overlays, {
                 heat: {
                     name: 'Heat Map',
                     type: 'heat',
@@ -414,20 +461,21 @@
                     visible: true,
                     doRefresh: true
                 },
-                messages: {
-                    name: 'Messages',
-                    type: 'group',
-                    visible: true,
-                    doRefresh: true
+                cluster: {
+                    name: 'Cluster',
+                    type: 'markercluster',
+                    visible: true
                 }
-            };
+
+            });
 
         $scope.center = {
             lat: 41.60722821271717,
             lng: 13.348388671875,
             zoom: 6
         }
-
+        
+    
         var chart = {
                     markers: {
                         messages: markers
@@ -479,11 +527,11 @@
     var getStatClusterMessages = function() {
       return Stat.ClusterMessages.getList(buildStatParams());
     };
-
+    
     var getStatSentimentMessages = function() {
       return Stat.SentimentMessages.getList(buildStatParams());
     };
-
+      
     var getStatMap = function() {
       return Stat.Map.getList(buildStatParams());
     };
@@ -629,14 +677,14 @@
           vm.stat = stats;
         });
     };
-
+      
     var statSentimentMessages = function() {
       return getStatSentimentMessages()
         .then(function(stats) {
           vm.stat = stats;
         });
     };
-
+      
     var statMap = function() {
       return getStatMap()
         .then(function(stats) {
@@ -756,7 +804,7 @@
         });
       });
     }, true);
-
+      
 
 
     var showCookieText = function() {
@@ -773,11 +821,11 @@
     };
 
     showCookieText();
+      
 
-
-
-
-
+ 
+      
+      
   }
 
 

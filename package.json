@@ -18,6 +18,8 @@
     "cors": "^2.7.1",
     "express": "^4.13.3",
     "jwt-simple": "^0.4.1",
+    "leaflet-search": "^2.3.6",
+    "leaflet.markercluster": "^1.1.0",
     "moment": "^2.12.0",
     "mongoose": "^4.4.6",
     "morgan": "^1.6.1",
