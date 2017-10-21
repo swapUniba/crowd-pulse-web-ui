@@ -78,6 +78,29 @@
           </md-card-title-media>
         </md-card-title>
       </md-card>
+
+        <md-card class="personal_data" md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch ng-if="user.linkedin">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Personal Data</span>
+                    <div ng-if="!user.devices || user.devices.length == 0">
+                        <p>No devices linked. Please download the CrowdPulse App.</p>
+                    </div>
+                    <div ng-repeat="element in user.devices">
+                        <hr>
+                        <div class="user_value" ng-repeat="(key, value) in filter(element)">
+                            <span ng-if="key != ' id'"><b>{{key}}</b> : <div ng-bind-html="value"></div></span>
+                        </div>
+                    </div>
+                </md-card-title-text>
+
+                <md-card-title-media>
+                    <div class="md-media-lg card-media">
+                        <img class="md-user-avatar" src="./app/images/phone.jpg">
+                    </div>
+                </md-card-title-media>
+            </md-card-title>
+        </md-card>
     </md-content>
 </div>
 

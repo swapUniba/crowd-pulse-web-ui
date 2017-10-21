@@ -1,0 +1,39 @@
+<md-content layout-padding flex>
+    <h2>Personal Data - Control Panel</h2>
+
+    <div ng-if="user.devices || user.devices.length > 0">
+        <md-content class="md-padding" layout-xs="column" layout="column">
+            <h3>User: {{user.displayName}}</h3>
+
+            <md-input-container>
+                <label>Please select a device</label>
+                <md-select ng-change="vm.onDeviceIdSelected()" ng-model="vm.selectedDeviceId">
+                    <md-option  ng-value="device.deviceId" ng-repeat="device in user.devices">
+                        {{ device.deviceId }}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <div ng-if="vm.selectedDeviceId">
+                <div ng-if="user.deviceConfigs && vm.selectedDeviceConfig">
+                    <div ng-repeat="(key, val) in vm.selectedDeviceConfig">
+                        <div ng-if="vm.startWith(key, 'read')">
+                            <md-switch ng-model="vm.selectedDeviceConfig[key]" ng-change="vm.onSwitchPressed()" aria-label="{{key}}" ng-true-value="1" ng-false-value="0">
+                                {{key}} - {{val}}
+                            </md-switch>
+                        </div>
+                    </div>
+                    <md-button>Save</md-button>
+                </div>
+                <div ng-if="!vm.selectedDeviceConfig || vm.selectedDeviceConfig == ''">
+                    <p>Error! No configuration stored for this device.</p>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+    <div ng-if="!user.devices || user.devices.length == 0">
+        <p>No devices linked. Please download the CrowdPulse App.</p>
+    </div>
+
+</md-content>

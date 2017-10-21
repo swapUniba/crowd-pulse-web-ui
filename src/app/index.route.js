@@ -83,8 +83,14 @@
         templateUrl: 'app/login/index.html',
         controller: 'LoginController',
         controllerAs: 'vm'
+      })
+
+      .state('app.personal_data', {
+          url: '/personal_data',
+          templateUrl: 'app/personal_data/personal_data.html',
+          controller: 'PersonalDataController',
+          controllerAs: 'vm'
       });
-      
 
     $urlRouterProvider.otherwise('/view');
   }
