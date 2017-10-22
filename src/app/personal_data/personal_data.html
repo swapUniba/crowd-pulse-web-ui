@@ -14,7 +14,7 @@
                 </md-select>
             </md-input-container>
 
-            <div ng-if="vm.selectedDeviceId">
+            <div ng-if="vm.selectedDeviceId && vm.loginSuccess">
                 <div ng-if="user.deviceConfigs && vm.selectedDeviceConfig">
                     <div ng-repeat="(key, val) in vm.selectedDeviceConfig">
                         <div ng-if="vm.startWith(key, 'read')">
@@ -23,7 +23,7 @@
                             </md-switch>
                         </div>
                     </div>
-                    <md-button>Save</md-button>
+                    <md-button ng-click="vm.sendConfiguration()">Save</md-button>
                 </div>
                 <div ng-if="!vm.selectedDeviceConfig || vm.selectedDeviceConfig == ''">
                     <p>Error! No configuration stored for this device.</p>
