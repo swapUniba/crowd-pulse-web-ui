@@ -25,6 +25,7 @@
                     if ($scope.user.deviceConfigs[i].deviceId === vm.selectedDeviceId) {
                         vm.selectedDeviceConfig = $scope.user.deviceConfigs[i];
                         socketLogin();
+                        setUpTimestamps();
                         console.log(vm.selectedDeviceConfig);
                         break;
                     }
@@ -42,8 +43,56 @@
             }
         };
 
+        //simple binary search algorithm
+        vm.onSliderMoved = function (key, ngModelData, listValueAllowed) {
+            var startPosition = 0;
+            var endPosition = listValueAllowed.length - 1;
+            var found = false;
+            while (!found) {
+                var midPosition = startPosition + parseInt((endPosition - startPosition) / 2);
+                var midValue = listValueAllowed[midPosition];
+                if (ngModelData === midValue) {
+                    found = true;
+                } else if (ngModelData < midValue) {
+                    endPosition = midPosition - 1;
+                } else {
+                    startPosition = midPosition + 1;
+                }
+                if (!found && endPosition - startPosition <= 0) {
+                    ngModelData = listValueAllowed[startPosition];
+                    found = true;
+                }
+            }
+
+            //update UI value
+            switch (key) {
+                case "readGPS":
+                    vm.timeGPS = ngModelData;
+                    break;
+                case "readNetStats":
+                    vm.timeNetStats = ngModelData;
+                    break;
+                case "readAccounts":
+                    vm.timeAccounts = ngModelData;
+                    break;
+                case "readContact":
+                    vm.timeContact = ngModelData;
+                    break;
+                case "readDisplay":
+                    vm.timeDisplay = ngModelData;
+                    break;
+                case "readAppInfo":
+                    vm.timeAppInfo = ngModelData;
+                    break;
+            }
+        };
+
         vm.sendConfiguration = function() {
             var response = vm.selectedDeviceConfig;
+            response.timeReadGPS = vm.timeGPS * (60 * 1000);
+            response.timeReadAccounts = vm.timeAccounts * (3600 * 1000);
+            response.timeReadNetStats = vm.timeNetStats * (3600 * 1000);
+            response.timeReadContact  = vm.timeContact  * (3600 * 1000);
             response.client = "web-ui";
             personalDataSocket.emit("config", response);
         };
@@ -69,6 +118,14 @@
             return $mdToast.show(toast);
         };
 
+        //convert milliseconds timestamps in minute and hour
+        var setUpTimestamps = function () {
+          vm.timeGPS = vm.selectedDeviceConfig.timeReadGPS / (60 * 1000);
+          vm.timeAccounts = vm.selectedDeviceConfig.timeReadAccounts / (3600 * 1000);
+          vm.timeNetStats = vm.selectedDeviceConfig.timeReadNetStats / (3600 * 1000);
+          vm.timeContact = vm.selectedDeviceConfig.timeReadContact / (3600 * 1000);
+        };
+
         personalDataSocket.on("login", function (response) {
             vm.loginSuccess = response.code === 1;
             showToast(response.description);
@@ -90,6 +147,21 @@
         vm.loginSuccess = false;
         vm.selectedDeviceId = null;
         vm.selectedDeviceConfig = null;
+
+        //timestamps
+        vm.timeGPS = null;
+        vm.timeAccounts = null;
+        vm.timeAppInfo = null;
+        vm.timeNetStats = null;
+        vm.timeDisplay = null;
+        vm.timeContact = null;
+
+        vm.timeGPSAllowed = [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60];  //minutes
+        vm.timeAccountsAllowed = [1, 2, 3, 4, 6, 8, 12, 24];             //hour
+        vm.timeAppInfoAllowed = [];                                      //no value
+        vm.timeNetStatsAllowed = [1, 2, 3, 4, 6, 8, 12, 24];             //hour
+        vm.timeDisplayAllowed = [];                                      //no value
+        vm.timeContactAllowed = [1, 2, 3, 4, 6, 8, 12, 24];              //hour
     }
 
 })();

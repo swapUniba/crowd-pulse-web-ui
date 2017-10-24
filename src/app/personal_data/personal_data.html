@@ -17,13 +17,64 @@
             <div ng-if="vm.selectedDeviceId && vm.loginSuccess">
                 <div ng-if="user.deviceConfigs && vm.selectedDeviceConfig">
                     <div ng-repeat="(key, val) in vm.selectedDeviceConfig">
-                        <div ng-if="vm.startWith(key, 'read')">
-                            <md-switch ng-model="vm.selectedDeviceConfig[key]" ng-change="vm.onSwitchPressed()" aria-label="{{key}}" ng-true-value="1" ng-false-value="0">
-                                {{key}} - {{val}}
-                            </md-switch>
+                        <div layout="row" ng-if="vm.startWith(key, 'read')">
+                            <div flex="20">
+                                <md-switch ng-model="vm.selectedDeviceConfig[key]"
+                                           ng-change="vm.onSwitchPressed()"
+                                           aria-label="{{key}}"
+                                           ng-true-value="1" ng-false-value="0">
+                                    {{key}}
+                                </md-switch>
+                            </div>
+
+                            <div flex="80">
+
+                                <!-- slider for account type data -->
+                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeAccounts, vm.timeAccountsAllowed)"
+                                           ng-if="key == 'readAccounts'" flex md-discrete ng-model="vm.timeAccounts"
+                                           step="1" min="1" max="24" aria-label="{{key}}"
+                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                </md-slider>
+
+                                <!-- slider for gps type data -->
+                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeGPS, vm.timeGPSAllowed)"
+                                           ng-if="key == 'readGPS'" flex md-discrete ng-model="vm.timeGPS"
+                                           step="1" min="1" max="60" aria-label="{{key}}"
+                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                </md-slider>
+
+                                <!-- slider for netstats type data -->
+                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeNetStats, vm.timeNetStatsAllowed)"
+                                           ng-if="key == 'readNetStats'" flex md-discrete ng-model="vm.timeNetStats"
+                                           step="1" min="1" max="24" aria-label="{{key}}"
+                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                </md-slider>
+
+                                <!-- slider for contact type data -->
+                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeContact, vm.timeContactAllowed)"
+                                           ng-if="key == 'readContact'" flex md-discrete ng-model="vm.timeContact"
+                                           step="1" min="1" max="24" aria-label="{{key}}"
+                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                </md-slider>
+
+                                <!-- slider for display type data -->
+                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeDisplay, vm.timeDisplayAllowed)"
+                                           ng-if="key == 'readDisplay'" flex md-discrete ng-model="vm.timeDisplay"
+                                           step="1" min="1" max="24" ng-disabled="true" aria-label="{{key}}"
+                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                </md-slider>
+
+                                <!-- slider for app info type data -->
+                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeAppInfo, vm.timeAppInfoAllowed)"
+                                           ng-if="key == 'readAppInfo'" flex md-discrete ng-model="vm.timeAppInfo"
+                                           step="1" min="1" max="24" ng-disabled="true" aria-label="{{key}}"
+                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                </md-slider>
+
+                            </div>
                         </div>
                     </div>
-                    <md-button ng-click="vm.sendConfiguration()">Save</md-button>
+                    <md-button class="md-raised md-primary" ng-click="vm.sendConfiguration()">Save</md-button>
                 </div>
                 <div ng-if="!vm.selectedDeviceConfig || vm.selectedDeviceConfig == ''">
                     <p>Error! No configuration stored for this device.</p>
