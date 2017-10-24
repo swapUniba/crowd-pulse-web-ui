@@ -30,46 +30,80 @@
                             <div flex="80">
 
                                 <!-- slider for account type data -->
-                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeAccounts, vm.timeAccountsAllowed)"
-                                           ng-if="key == 'readAccounts'" flex md-discrete ng-model="vm.timeAccounts"
-                                           step="1" min="1" max="24" aria-label="{{key}}"
-                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
-                                </md-slider>
+                                <div ng-if="key == 'readAccounts'" layout="row">
+                                    <md-slider flex="70"
+                                               ng-change="vm.onSliderMoved(key, vm.timeAccounts, vm.timeAccountsAllowed)"
+                                               md-discrete ng-model="vm.timeAccounts"
+                                               step="1" min="1" max="24" aria-label="{{key}}"
+                                               ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                    </md-slider>
+                                    <div flex="30" layout layout-align="center center">
+                                        <span class="md-body-1">get account data every {{vm.timeAccounts}} hours</span>
+                                    </div>
+                                </div>
 
                                 <!-- slider for gps type data -->
-                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeGPS, vm.timeGPSAllowed)"
-                                           ng-if="key == 'readGPS'" flex md-discrete ng-model="vm.timeGPS"
-                                           step="1" min="1" max="60" aria-label="{{key}}"
-                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
-                                </md-slider>
+                                <div ng-if="key == 'readGPS'" layout="row">
+                                    <md-slider flex="70"
+                                               ng-change="vm.onSliderMoved(key, vm.timeGPS, vm.timeGPSAllowed)"
+                                               md-discrete ng-model="vm.timeGPS"
+                                               step="1" min="1" max="60" aria-label="{{key}}"
+                                               ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                    </md-slider>
+                                    <div flex="30" layout layout-align="center center">
+                                        <span class="md-body-1">get GPS data every {{vm.timeGPS}} minutes</span>
+                                    </div>
+                                </div>
 
                                 <!-- slider for netstats type data -->
-                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeNetStats, vm.timeNetStatsAllowed)"
-                                           ng-if="key == 'readNetStats'" flex md-discrete ng-model="vm.timeNetStats"
-                                           step="1" min="1" max="24" aria-label="{{key}}"
-                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
-                                </md-slider>
+                                <div ng-if="key == 'readNetStats'" layout="row">
+                                    <md-slider flex="70"
+                                               ng-change="vm.onSliderMoved(key, vm.timeNetStats, vm.timeNetStatsAllowed)"
+                                               md-discrete ng-model="vm.timeNetStats"
+                                               step="1" min="1" max="24" aria-label="{{key}}"
+                                               ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                    </md-slider>
+                                    <div flex="30" layout layout-align="center center">
+                                        <span class="md-body-1">get net statistics data every {{vm.timeNetStats}} hours</span>
+                                    </div>
+                                </div>
 
                                 <!-- slider for contact type data -->
-                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeContact, vm.timeContactAllowed)"
-                                           ng-if="key == 'readContact'" flex md-discrete ng-model="vm.timeContact"
-                                           step="1" min="1" max="24" aria-label="{{key}}"
-                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
-                                </md-slider>
+                                <div ng-if="key == 'readContact'" layout="row">
+                                    <md-slider flex="70"
+                                               ng-change="vm.onSliderMoved(key, vm.timeContact, vm.timeContactAllowed)"
+                                               md-discrete ng-model="vm.timeContact"
+                                               step="1" min="1" max="24" aria-label="{{key}}"
+                                               ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                    </md-slider>
+                                    <div flex="30" layout layout-align="center center">
+                                        <span class="md-body-1">get contacts data every {{vm.timeContact}} hours</span>
+                                    </div>
+                                </div>
 
-                                <!-- slider for display type data -->
-                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeDisplay, vm.timeDisplayAllowed)"
-                                           ng-if="key == 'readDisplay'" flex md-discrete ng-model="vm.timeDisplay"
-                                           step="1" min="1" max="24" ng-disabled="true" aria-label="{{key}}"
-                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
-                                </md-slider>
+                                <!-- slider for display type data, slider disabled by default -->
+                                <div ng-if="key == 'readDisplay'" layout="row">
+                                    <md-slider flex="70"
+                                               ng-change="vm.onSliderMoved(key, vm.timeDisplay, vm.timeDisplayAllowed)"
+                                               md-discrete ng-model="vm.timeDisplay"
+                                               step="1" min="1" max="24" ng-disabled="true" aria-label="{{key}}">
+                                    </md-slider>
+                                    <div flex="30" layout layout-align="center center">
+                                        <span class="md-body-1">get display data </span>
+                                    </div>
+                                </div>
 
-                                <!-- slider for app info type data -->
-                                <md-slider ng-change="vm.onSliderMoved(key, vm.timeAppInfo, vm.timeAppInfoAllowed)"
-                                           ng-if="key == 'readAppInfo'" flex md-discrete ng-model="vm.timeAppInfo"
-                                           step="1" min="1" max="24" ng-disabled="true" aria-label="{{key}}"
-                                           ng-disabled="vm.selectedDeviceConfig[key] == 0">
-                                </md-slider>
+                                <!-- slider for app info type data, slider disabled by default -->
+                                <div ng-if="key == 'readAppInfo'" layout="row">
+                                    <md-slider flex="70"
+                                               ng-change="vm.onSliderMoved(key, vm.timeAppInfo, vm.timeAppInfoAllowed)"
+                                               md-discrete ng-model="vm.timeAppInfo"
+                                               step="1" min="1" max="24" ng-disabled="true" aria-label="{{key}}">
+                                    </md-slider>
+                                    <div flex="30" layout layout-align="center center">
+                                        <span class="md-body-1">get appinfo data </span>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
