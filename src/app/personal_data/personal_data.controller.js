@@ -101,6 +101,15 @@
             return text.startsWith(start);
         };
 
+        vm.getDataFromDevice = function () {
+            var data = {
+                deviceId: vm.selectedDeviceId,
+                displayName: $scope.user.displayName,
+                client: "web-ui"
+            };
+            personalDataSocket.emit("send_data", data);
+        };
+
         var socketLogin = function() {
             var loginData = {
                 email: $scope.user.email,
@@ -141,6 +150,10 @@
             } else if (response.config.deviceId === vm.selectedDeviceId) {
                 showToast(response.description);
             }
+        });
+
+        personalDataSocket.on("send_data", function (response) {
+            showToast(response.description);
         });
 
         vm.getProfile();
