@@ -156,7 +156,33 @@
       }];
       return chart;
     };
-      
+
+      var buildPieChartPersonalData = function(title, values) {
+          var chart = buildBaseHighcharts('pie');
+          chart.tooltip = {
+              pointFormat: '{series.name}: <b>{point.y} ({point.percentage:.1f}%)</b>'
+          };
+          chart.plotOptions = {
+              pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                      enabled: true,
+                      format: '<b>{point.name}</b>: {point.y} ({point.percentage:.1f}%)',
+                      style: {
+                          color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                      }
+                  }
+              }
+          };
+          chart.series = [{
+              name: title,
+              colorByPoint: true,
+              data: values
+          }];
+          return chart;
+      };
+
     var buildPieChartSentiment = function(title, values) {
       var chart = buildBaseHighcharts('pie');
       chart.tooltip = {
@@ -548,6 +574,10 @@
       return Stat.Graph.one().get(buildStatParams());
     };
 
+    var getPersonalDataSource = function() {
+      return Stat.PersonalDataSource.getList({db: vm.params.database});
+    };
+
     // REST TO CHART MAPPERS
 
     var matStatToPie = function(stats) {
@@ -684,7 +714,15 @@
           vm.stat = stats;
         });
     };
-      
+
+    var statPersonalDataSource = function() {
+        return getPersonalDataSource()
+            .then(matStatToPie)
+            .then(function (stats) {
+                vm.stat = buildPieChartPersonalData("Personal Data", stats);
+            });
+    };
+
     var statMap = function() {
       return getStatMap()
         .then(function(stats) {
@@ -781,6 +819,7 @@
       'topic-messages': statTopicMessages,
       'cluster-messages': statClusterMessages,
       'sentiment-messages': statSentimentMessages,
+      'personaldatasource-pie': statPersonalDataSource,
       'map': statMap
     };
 

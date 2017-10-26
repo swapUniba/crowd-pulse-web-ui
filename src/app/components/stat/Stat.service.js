@@ -19,6 +19,7 @@
       TopicMessages: Restangular.service('topic/messages', statsEndpoint),
       ClusterMessages: Restangular.service('cluster/messages', statsEndpoint),
       SentimentMessages: Restangular.service('sentiment/messages', statsEndpoint),
+      PersonalDataSource: Restangular.service('personal_data/source', statsEndpoint),
       Map: Restangular.service('map', statsEndpoint)
     };
   }

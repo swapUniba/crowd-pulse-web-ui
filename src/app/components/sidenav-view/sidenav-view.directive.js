@@ -62,6 +62,7 @@
         {group: 'Topic LDA', id: 'topic-bar', name: 'Bar Chart', filters: [filterDb, filterTerm, filterQuery, filterDateRange, filterSentiment, filterLanguage, filterDistance]},
         {group: 'Topic kmeans', id: 'cluster-pie', name: 'Pie Chart', filters: [filterDb, filterTerm, filterQuery, filterDateRange, filterSentiment, filterLanguage, filterDistance]},
         {group: 'Topic kmeans', id: 'cluster-bar', name: 'Bar Chart', filters: [filterDb, filterTerm, filterQuery, filterDateRange, filterSentiment, filterLanguage, filterDistance]},
+        {group: 'Personal Data', id: 'personaldatasource-pie', name: 'Pie Chart', filters: [filterDb]},
         {group: 'Map', id: 'map', name: 'Map', filters: [filterDb, filterTerm, filterQuery, filterDateRange, filterSentiment, filterLanguage, filterDistance]}
 
       ];
