@@ -6,7 +6,7 @@
         .controller('PersonalDataController', PersonalDataController);
 
     /** @ngInject */
-    function PersonalDataController($mdToast, $scope, personalDataSocket, Account) {
+    function PersonalDataController($mdToast, $scope, personalDataSocket, Account, $mdDialog) {
         var vm = this;
 
         vm.getProfile = function() {
@@ -110,6 +110,42 @@
             personalDataSocket.emit("send_data", data);
         };
 
+        vm.openDialog = function (event, key) {
+            var infoText = "";
+            switch (key) {
+                case "readGPS":
+                    infoText = "GPS data is the user position in terms of latitude and logitude.";
+                    break;
+                case "readNetStats":
+                    infoText = "Network traffic statistics in terms of bytes transmitted and received " +
+                        "over mobile net and Wifi." + "\n" +
+                        "These statistics may not be available on all platforms.";
+                    break;
+                case "readAccounts":
+                    infoText = "Accounts data are user's accounts informations " +
+                        "(application package and user name) stored in the smartphone.";
+                    break;
+                case "readContact":
+                    infoText = "User's contacts informations stored in the smartphone (with phone numbers).";
+                    break;
+                case "readDisplay":
+                    infoText = "On/Off display total time.";
+                    break;
+                case "readAppInfo":
+                    infoText = "Information about the applications installed on the device.";
+                    break;
+            }
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .title("Information")
+                    .clickOutsideToClose(true)
+                    .content(infoText)
+                    .ariaLabel('Information')
+                    .targetEvent(event)
+                    .ok('Got it!')
+            );
+        };
+
         var socketLogin = function() {
             var loginData = {
                 email: $scope.user.email,
@@ -129,11 +165,12 @@
 
         //convert milliseconds timestamps in minute and hour
         var setUpTimestamps = function () {
-          vm.timeGPS = vm.selectedDeviceConfig.timeReadGPS / (60 * 1000);
-          vm.timeAccounts = vm.selectedDeviceConfig.timeReadAccounts / (3600 * 1000);
-          vm.timeNetStats = vm.selectedDeviceConfig.timeReadNetStats / (3600 * 1000);
-          vm.timeContact = vm.selectedDeviceConfig.timeReadContact / (3600 * 1000);
+          vm.timeGPS = parseInt(vm.selectedDeviceConfig.timeReadGPS) / (60 * 1000);
+          vm.timeAccounts = parseInt(vm.selectedDeviceConfig.timeReadAccounts) / (3600 * 1000);
+          vm.timeNetStats = parseInt(vm.selectedDeviceConfig.timeReadNetStats) / (3600 * 1000);
+          vm.timeContact = parseInt(vm.selectedDeviceConfig.timeReadContact) / (3600 * 1000);
         };
+
 
         personalDataSocket.on("login", function (response) {
             vm.loginSuccess = response.code === 1;
@@ -146,6 +183,8 @@
 
                 //update the object
                 vm.onSwitchPressed();
+                setUpTimestamps();
+
                 console.log("New configuration coming from smartphone");
             } else if (response.config.deviceId === vm.selectedDeviceId) {
                 showToast(response.description);
