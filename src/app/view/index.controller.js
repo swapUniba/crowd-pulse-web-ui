@@ -640,13 +640,22 @@
             return Stat.PersonalDataGPSMap.getList(filter);
         };
 
-        var getStatPersonalDataAppInfo = function () {
+        var getStatPersonalDataAppInfoBar = function () {
             var filter = {
                 db: vm.params.database,
                 from: vm.params.fromDate,
                 to: vm.params.toDate
             };
             return Stat.PersonalDataAppInfoBar.getList(filter);
+        };
+
+        var getStatPersonalDataAppInfoTimeline = function () {
+            var filter = {
+                db: vm.params.database,
+                from: vm.params.fromDate,
+                to: vm.params.toDate
+            };
+            return Stat.PersonalDataAppInfoTimeline.getList(filter);
         };
 
         // REST TO CHART MAPPERS
@@ -694,6 +703,18 @@
                         return [(new Date(elem.date)).getTime(), elem.value];
                     }),
                     color: color
+                };
+            });
+        };
+
+        var mapAppInfoToTimeline = function (stats) {
+            return stats.map(function(stat) {
+                return {
+                    name: stat.name,
+                    data: stat.values.map(function(elem) {
+                        return [(new Date(elem.date * 86400000)).getTime(), elem.value];
+                    }),
+                    color: "#000000"
                 };
             });
         };
@@ -822,12 +843,19 @@
         };
 
         var statPersonalDataAppInfoBar = function () {
-            return getStatPersonalDataAppInfo()
+            return getStatPersonalDataAppInfoBar()
                 .then(mapAppInfoToBar)
                 .then(function (stats) {
-                    console.log(stats);
                     vm.stat = buildPersonalDataAppInfoBar("Package Name", stats[0],
                         "Total Foreground Time", stats[1]);
+                });
+        };
+
+        var statPersonalDataAppInfoTimeline = function () {
+            return getStatPersonalDataAppInfoTimeline()
+                .then(mapAppInfoToTimeline)
+                .then(function (timeline) {
+                    vm.stat = buildTimelineChart("App Usage Distribution", timeline);
                 });
         };
 
@@ -932,7 +960,7 @@
             'personaldataappinfo-bar': statPersonalDataAppInfoBar,
             'personaldatanetstat-bar': null, //TODO complete here
             'personaldatacontact-bar': null, //TODO complete here
-            'personaldataappinfo-timeline': null, //TODO complete here
+            'personaldataappinfo-timeline': statPersonalDataAppInfoTimeline,
             'personaldatanetstat-timeline': null, //TODO complete here
             'map': statMap
         };
@@ -958,8 +986,6 @@
             });
         }, true);
 
-
-
         var showCookieText = function() {
             var val = $cookies.get('cookieView');
             if(val == null){
@@ -975,12 +1001,6 @@
 
         showCookieText();
 
-
-
-
-
     }
-
-
 
 })();
