@@ -360,7 +360,7 @@
             return chart;
         };
 
-        var buildPersonalDataAppInfoBar = function(xTitle, xValues, yTitle, yValues) {
+        var buildPersonalDataBar = function(xTitle, xValues, yTitle, yValues) {
             var chart = buildBaseHighcharts('bar');
             chart.tooltip = {
                 pointFormat: '{series.packageName}: <b>{point.y}</b>'
@@ -649,6 +649,15 @@
             return Stat.PersonalDataAppInfoBar.getList(filter);
         };
 
+        var getStatPersonalDataNetStatBar = function () {
+            var filter = {
+                db: vm.params.database,
+                from: vm.params.fromDate,
+                to: vm.params.toDate
+            };
+            return Stat.PersonalDataNetStatBar.getList(filter);
+        };
+
         var getStatPersonalDataAppInfoTimeline = function () {
             var filter = {
                 db: vm.params.database,
@@ -746,7 +755,7 @@
             });
         };
 
-        var setRxAndTxBytes = function (stats) {
+        var setRxAndTxBytesForTimeline = function (stats) {
             var newStats = [];
             for (var i = 0; i < stats.length; i++) {
 
@@ -769,6 +778,24 @@
                         };
                     })
                 });
+            }
+            return newStats;
+        };
+
+        var setRxAndTxBytesForBar = function (stats) {
+            var newStats = [];
+            for (var i = 0; i < stats.length; i++) {
+
+                newStats.push({
+                    name: stats[i].networkType + "-received",
+                    value: stats[i].totalRxBytes
+                });
+
+                newStats.push({
+                    name: stats[i].networkType + "-transmitted",
+                    value: stats[i].totalTxBytes
+                });
+
             }
             return newStats;
         };
@@ -900,8 +927,18 @@
             return getStatPersonalDataAppInfoBar()
                 .then(mapAppInfoToBar)
                 .then(function (stats) {
-                    vm.stat = buildPersonalDataAppInfoBar("Package Name", stats[0],
+                    vm.stat = buildPersonalDataBar("Package Name", stats[0],
                         "Total Foreground Time", stats[1]);
+                });
+        };
+
+        var statPersonalDataNetStatBar = function () {
+            return getStatPersonalDataNetStatBar()
+                .then(setRxAndTxBytesForBar)
+                .then(mapStatToBar)
+                .then(function (stats) {
+                    vm.stat = buildPersonalDataBar("Network Type", stats[0],
+                        "Data received/transmitted (in bytes)", stats[1]);
                 });
         };
 
@@ -915,7 +952,7 @@
 
         var statPersonalDataNetStatTimeline = function () {
             return getStatPersonalDataNetStatTimeline()
-                .then(setRxAndTxBytes)
+                .then(setRxAndTxBytesForTimeline)
                 .then(mapNetStatToTimeline)
                 .then(function (timeline) {
                     vm.stat = buildTimelineChart("Network Statistics (Rx and Tx bytes)", timeline);
@@ -1021,7 +1058,7 @@
             'personaldatasource-pie': statPersonalDataSource,
             'personaldatagps-map': statPersonalDataGPSMap,
             'personaldataappinfo-bar': statPersonalDataAppInfoBar,
-            'personaldatanetstat-bar': null, //TODO complete here
+            'personaldatanetstat-bar': statPersonalDataNetStatBar,
             'personaldatacontact-bar': null, //TODO complete here
             'personaldataappinfo-timeline': statPersonalDataAppInfoTimeline,
             'personaldatanetstat-timeline': statPersonalDataNetStatTimeline,
