@@ -174,7 +174,6 @@
 
         personalDataSocket.on("login", function (response) {
             vm.loginSuccess = response.code === 1;
-            showToast(response.description);
         });
 
         personalDataSocket.on("config", function (response) {
@@ -192,7 +191,9 @@
         });
 
         personalDataSocket.on("send_data", function (response) {
-            showToast(response.description);
+            if (response.code === 2) {
+                showToast(response.description);
+            }
         });
 
         vm.getProfile();
