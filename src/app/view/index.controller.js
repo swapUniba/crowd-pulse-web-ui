@@ -658,6 +658,15 @@
             return Stat.PersonalDataAppInfoTimeline.getList(filter);
         };
 
+        var getStatPersonalDataNetStatTimeline = function () {
+            var filter = {
+                db: vm.params.database,
+                from: vm.params.fromDate,
+                to: vm.params.toDate
+            };
+            return Stat.PersonalDataNetStatTimeline.getList(filter);
+        };
+
         // REST TO CHART MAPPERS
 
         var matStatToPie = function(stats) {
@@ -711,12 +720,57 @@
             return stats.map(function(stat) {
                 return {
                     name: stat.name,
-                    data: stat.values.map(function(elem) {
+                    data: stat.values.sort(function(a,b) {return a.date - b.date;}).map(function(elem) {
                         return [(new Date(elem.date * 86400000)).getTime(), elem.value];
                     }),
                     color: "#000000"
                 };
             });
+        };
+
+        var mapNetStatToTimeline = function (stats) {
+            return stats.map(function(stat) {
+                var color = '#000000';
+                if (stat.networkType.startsWith('wifi')) {
+                    color = '#73E639';
+                } else if (stat.networkType.startsWith('mobile')) {
+                    color = '#E63939';
+                }
+                return {
+                    name: stat.networkType,
+                    data: stat.values.sort(function(a,b) {return a.date - b.date;}).map(function(elem) {
+                        return [(new Date(elem.date * 86400000)).getTime(), elem.value];
+                    }),
+                    color: color
+                };
+            });
+        };
+
+        var setRxAndTxBytes = function (stats) {
+            var newStats = [];
+            for (var i = 0; i < stats.length; i++) {
+
+                newStats.push({
+                    networkType: stats[i].networkType + "-received",
+                    values: stats[i].values.map(function(val) {
+                        return {
+                            date: val.date,
+                            value: val.totalRxBytes
+                        };
+                    })
+                });
+
+                newStats.push({
+                    networkType: stats[i].networkType + "-transmitted",
+                    values: stats[i].values.map(function(val) {
+                        return {
+                            date: val.date,
+                            value: val.totalTxBytes
+                        };
+                    })
+                });
+            }
+            return newStats;
         };
 
         var mapStatToGpsMap = function(stats) {
@@ -859,6 +913,15 @@
                 });
         };
 
+        var statPersonalDataNetStatTimeline = function () {
+            return getStatPersonalDataNetStatTimeline()
+                .then(setRxAndTxBytes)
+                .then(mapNetStatToTimeline)
+                .then(function (timeline) {
+                    vm.stat = buildTimelineChart("Network Statistics (Rx and Tx bytes)", timeline);
+                });
+        };
+
         var statMap = function() {
             return getStatMap()
                 .then(function(stats) {
@@ -961,7 +1024,7 @@
             'personaldatanetstat-bar': null, //TODO complete here
             'personaldatacontact-bar': null, //TODO complete here
             'personaldataappinfo-timeline': statPersonalDataAppInfoTimeline,
-            'personaldatanetstat-timeline': null, //TODO complete here
+            'personaldatanetstat-timeline': statPersonalDataNetStatTimeline,
             'map': statMap
         };
 
