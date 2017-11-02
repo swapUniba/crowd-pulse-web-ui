@@ -658,6 +658,10 @@
             return Stat.PersonalDataNetStatBar.getList(filter);
         };
 
+        var getStatPersonalDataContactBar = function() {
+            return Stat.PersonalDataContactBar.getList({db: vm.params.database});
+        };
+
         var getStatPersonalDataAppInfoTimeline = function () {
             var filter = {
                 db: vm.params.database,
@@ -942,6 +946,15 @@
                 });
         };
 
+        var statPersonalDataContactBar = function () {
+            return getStatPersonalDataContactBar()
+                .then(mapStatToBar)
+                .then(function (stats) {
+                    vm.stat = buildPersonalDataBar("Users", stats[0],
+                        "Contact Number", stats[1]);
+                });
+        };
+
         var statPersonalDataAppInfoTimeline = function () {
             return getStatPersonalDataAppInfoTimeline()
                 .then(mapAppInfoToTimeline)
@@ -1059,7 +1072,7 @@
             'personaldatagps-map': statPersonalDataGPSMap,
             'personaldataappinfo-bar': statPersonalDataAppInfoBar,
             'personaldatanetstat-bar': statPersonalDataNetStatBar,
-            'personaldatacontact-bar': null, //TODO complete here
+            'personaldatacontact-bar': statPersonalDataContactBar,
             'personaldataappinfo-timeline': statPersonalDataAppInfoTimeline,
             'personaldatanetstat-timeline': statPersonalDataNetStatTimeline,
             'map': statMap
