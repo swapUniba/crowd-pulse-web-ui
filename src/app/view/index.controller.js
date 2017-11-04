@@ -7,7 +7,8 @@
 
     /* global Highcharts:false */
     /** @ngInject */
-    function ViewIndexController($mdSidenav, $cookies, $state, $mdDialog, $scope, $timeout, $window, $q, $http, Stat, config, leafletData) {
+    function ViewIndexController($mdSidenav, $cookies, $state, $mdDialog, $scope, $timeout, $window, $q, $http, Stat,
+                                 config, leafletData) {
         var vm = this;
 
         vm.params = {};
@@ -363,7 +364,7 @@
         var buildPersonalDataBar = function(xTitle, xValues, yTitle, yValues) {
             var chart = buildBaseHighcharts('bar');
             chart.tooltip = {
-                pointFormat: '{series.packageName}: <b>{point.y}</b>'
+                pointFormat: '{series.name}: <b>{point.y}</b>'
             };
             chart.xAxis = {
                 categories: xValues,
@@ -456,6 +457,7 @@
         var buildPersonalDataGPSMap = function (points) {
             var gpsPoints = [];
             var markers = [];
+            var heatMap = [];
 
             for(var i = 0; i < points.length; i++) {
                 markers.push({
@@ -469,7 +471,32 @@
                     lat: points[i].latitude,
                     lng: points[i].longitude
                 });
+                heatMap.push([
+                    points[i].latitude,
+                    points[i].longitude,
+                    "1500"
+                ]);
             }
+
+            angular.extend($scope.layers.overlays, {
+                heat: {
+                    name: 'Heat Map',
+                    type: 'heat',
+                    data: heatMap,
+                    layerOptions: {
+                        radius: 40,
+                        blur: 15
+                    },
+                    visible: true,
+                    doRefresh: true
+                },
+                cluster: {
+                    name: 'Cluster',
+                    type: 'markercluster',
+                    visible: true
+                }
+
+            });
 
             angular.extend($scope.paths, {
                 defaultPath: {
@@ -680,6 +707,15 @@
             return Stat.PersonalDataNetStatTimeline.getList(filter);
         };
 
+        var getStatPersonalDataDisplayBar = function () {
+            var filter = {
+                db: vm.params.database,
+                from: vm.params.fromDate,
+                to: vm.params.toDate
+            };
+            return Stat.PersonalDataDisplayBar.getList(filter);
+        };
+
         // REST TO CHART MAPPERS
 
         var matStatToPie = function(stats) {
@@ -697,16 +733,6 @@
             });
             var series = stats.map(function(stat) {
                 return stat.value;
-            });
-            return [cats, series];
-        };
-
-        var mapAppInfoToBar = function(stats) {
-            var cats = stats.map(function(stat) {
-                return stat.packageName;
-            });
-            var series = stats.map(function(stat) {
-                return stat.totalForegroundTime;
             });
             return [cats, series];
         };
@@ -919,7 +945,7 @@
                 });
         };
 
-        var statPersonalDataGPSMap = function () {
+        var statPersonalDataGPSMap = function() {
             return getPersonalDataGPSMap()
                 .then(mapStatToGpsMap)
                 .then(function (stats) {
@@ -927,16 +953,16 @@
                 });
         };
 
-        var statPersonalDataAppInfoBar = function () {
+        var statPersonalDataAppInfoBar = function() {
             return getStatPersonalDataAppInfoBar()
-                .then(mapAppInfoToBar)
+                .then(mapStatToBar)
                 .then(function (stats) {
                     vm.stat = buildPersonalDataBar("Package Name", stats[0],
-                        "Total Foreground Time", stats[1]);
+                        "Total Foreground Time (in milliseconds)", stats[1]);
                 });
         };
 
-        var statPersonalDataNetStatBar = function () {
+        var statPersonalDataNetStatBar = function() {
             return getStatPersonalDataNetStatBar()
                 .then(setRxAndTxBytesForBar)
                 .then(mapStatToBar)
@@ -946,7 +972,7 @@
                 });
         };
 
-        var statPersonalDataContactBar = function () {
+        var statPersonalDataContactBar = function() {
             return getStatPersonalDataContactBar()
                 .then(mapStatToBar)
                 .then(function (stats) {
@@ -955,7 +981,7 @@
                 });
         };
 
-        var statPersonalDataAppInfoTimeline = function () {
+        var statPersonalDataAppInfoTimeline = function() {
             return getStatPersonalDataAppInfoTimeline()
                 .then(mapAppInfoToTimeline)
                 .then(function (timeline) {
@@ -963,12 +989,21 @@
                 });
         };
 
-        var statPersonalDataNetStatTimeline = function () {
+        var statPersonalDataNetStatTimeline = function() {
             return getStatPersonalDataNetStatTimeline()
                 .then(setRxAndTxBytesForTimeline)
                 .then(mapNetStatToTimeline)
                 .then(function (timeline) {
                     vm.stat = buildTimelineChart("Network Statistics (Rx and Tx bytes)", timeline);
+                });
+        };
+
+        var statPersonalDataDisplayBar = function() {
+            return getStatPersonalDataDisplayBar()
+                .then(mapStatToBar)
+                .then(function (stats) {
+                    vm.stat = buildPersonalDataBar("Times", stats[0],
+                        "Display Statistics (in milliseconds)", stats[1]);
                 });
         };
 
@@ -1075,6 +1110,7 @@
             'personaldatacontact-bar': statPersonalDataContactBar,
             'personaldataappinfo-timeline': statPersonalDataAppInfoTimeline,
             'personaldatanetstat-timeline': statPersonalDataNetStatTimeline,
+            'personaldatadisplay-bar': statPersonalDataDisplayBar,
             'map': statMap
         };
 

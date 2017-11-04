@@ -23,7 +23,7 @@
         /** @ngInject */
         function SidenavViewController($state, $scope, $stateParams, Database, Term, Profile, Corpus, Language,
                                        filterDb, filterTerm, filterQuery, filterDateRange, filterProfile, filterIndex,
-                                       filterSentiment, filterLanguage, filterDistance) {
+                                       filterSentiment, filterLanguage, filterDistance, filterDateRangeWithHour) {
             var sidenavViewVm = this;
 
 
@@ -47,6 +47,7 @@
             sidenavViewVm.filterSentiment = filterSentiment;
             sidenavViewVm.filterLanguage = filterLanguage;
             sidenavViewVm.filterDistance = filterDistance;
+            sidenavViewVm.filterDateRangeWithHour = filterDateRangeWithHour;
 
             // available data visualizations
             sidenavViewVm.viz = [
@@ -64,12 +65,13 @@
                 {group: 'Topic kmeans', id: 'cluster-pie', name: 'Pie Chart', filters: [filterDb, filterTerm, filterQuery, filterDateRange, filterSentiment, filterLanguage, filterDistance]},
                 {group: 'Topic kmeans', id: 'cluster-bar', name: 'Bar Chart', filters: [filterDb, filterTerm, filterQuery, filterDateRange, filterSentiment, filterLanguage, filterDistance]},
                 {group: 'Personal Data', id: 'personaldatasource-pie', name: 'Source Stat Pie Chart', filters: [filterDb]},
-                {group: 'Personal Data', id: 'personaldatagps-map', name: 'GPS Map', filters: [filterDb, filterDateRange, filterDistance]},
+                {group: 'Personal Data', id: 'personaldatagps-map', name: 'GPS Map', filters: [filterDb, filterDateRangeWithHour, filterDistance]},
                 {group: 'Personal Data', id: 'personaldataappinfo-bar', name: 'App Bar Chart', filters: [filterDb, filterDateRange]},
-                {group: 'Personal Data', id: 'personaldatanetstat-bar', name: 'NetStat Bar Chart', filters: [filterDb, filterDateRange]},
+                {group: 'Personal Data', id: 'personaldatanetstat-bar', name: 'NetStat Bar Chart', filters: [filterDb, filterDateRangeWithHour]},
                 {group: 'Personal Data', id: 'personaldatacontact-bar', name: 'Contact Bar Chart', filters: [filterDb]},
+                {group: 'Personal Data', id: 'personaldatadisplay-bar', name: 'DisplayStat Bar Chart', filters: [filterDb, filterDateRangeWithHour]},
                 {group: 'Personal Data', id: 'personaldataappinfo-timeline', name: 'App Timeline', filters: [filterDb, filterDateRange]},
-                {group: 'Personal Data', id: 'personaldatanetstat-timeline', name: 'NetStat Timeline', filters: [filterDb, filterDateRange]},
+                {group: 'Personal Data', id: 'personaldatanetstat-timeline', name: 'NetStat Timeline', filters: [filterDb, filterDateRangeWithHour]},
                 {group: 'Map', id: 'map', name: 'Map', filters: [filterDb, filterTerm, filterQuery, filterDateRange, filterSentiment, filterLanguage, filterDistance]}
             ];
 
@@ -99,7 +101,6 @@
                 {name: 'positive', type: 'positive'},
                 {name: 'negative', type: 'negative'},
                 {name: 'neutral', type: 'neutral'}];
-
 
             // available filters on the language
             sidenavViewVm.availableLanguages = [

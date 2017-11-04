@@ -26,6 +26,7 @@
             PersonalDataNetStatBar: Restangular.service('personal_data/netstat/bar', statsEndpoint),
             PersonalDataNetStatTimeline: Restangular.service('personal_data/netstat/timeline', statsEndpoint),
             PersonalDataContactBar: Restangular.service('personal_data/contact/bar', statsEndpoint),
+            PersonalDataDisplayBar: Restangular.service('personal_data/display/bar', statsEndpoint),
             Map: Restangular.service('map', statsEndpoint)
         };
     }

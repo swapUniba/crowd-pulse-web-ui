@@ -18,6 +18,7 @@
     .constant('filterIndex', 'I')
     .constant('filterSentiment', 'S')
     .constant('filterLanguage', 'L')
-    .constant('filterDistance', 'D');
+    .constant('filterDistance', 'DI')
+    .constant('filterDateRangeWithHour', 'H');
 
 })();
