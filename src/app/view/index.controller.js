@@ -976,8 +976,8 @@
             return getStatPersonalDataContactBar()
                 .then(mapStatToBar)
                 .then(function (stats) {
-                    vm.stat = buildPersonalDataBar("Users", stats[0],
-                        "Contact Number", stats[1]);
+                    vm.stat = buildPersonalDataBar("Contacts Name", stats[0],
+                        "Contacted Times", stats[1]);
                 });
         };
 
