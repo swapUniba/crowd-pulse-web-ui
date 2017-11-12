@@ -671,7 +671,8 @@
             var filter = {
                 db: vm.params.database,
                 from: vm.params.fromDate,
-                to: vm.params.toDate
+                to: vm.params.toDate,
+                limitResults: vm.params.limitResults
             };
             return Stat.PersonalDataAppInfoBar.getList(filter);
         };
@@ -686,7 +687,10 @@
         };
 
         var getStatPersonalDataContactBar = function() {
-            return Stat.PersonalDataContactBar.getList({db: vm.params.database});
+            return Stat.PersonalDataContactBar.getList({
+                db: vm.params.database,
+                limitResults: vm.params.limitResults
+            });
         };
 
         var getStatPersonalDataAppInfoTimeline = function () {

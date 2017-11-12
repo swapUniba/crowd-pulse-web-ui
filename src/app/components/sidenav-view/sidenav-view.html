@@ -53,6 +53,7 @@
                         <md-icon>clear</md-icon>
                     </md-button>
                 </div>
+
                 <div ng-if="sidenavViewVm.hasParam(sidenavViewVm.filterDateRangeWithHour)"
                      class="md-custom-container with-padding" layout="row">
                     <input mdc-datetime-picker date="true" time="true" type="text"
@@ -65,6 +66,11 @@
                         <md-icon>clear</md-icon>
                     </md-button>
                 </div>
+
+                <md-input-container ng-if="sidenavViewVm.hasParam(sidenavViewVm.filterLimitResults)">
+                    <label>Limit results</label>
+                    <input type="number" flex ng-model="sidenavViewVm.params.limitResults">
+                </md-input-container>
 
                 <md-input-container ng-if="sidenavViewVm.hasParam(sidenavViewVm.filterTerm)">
                     <label>Filter on</label>
@@ -90,6 +96,7 @@
                         <span>{{$chip}}</span>
                     </md-chip-template>
                 </md-chips>
+
                 <md-chips ng-if="sidenavViewVm.hasParam(sidenavViewVm.filterProfile)"
                           ng-model="sidenavViewVm.params.users" md-autocomplete-snap
                           md-require-match="true">

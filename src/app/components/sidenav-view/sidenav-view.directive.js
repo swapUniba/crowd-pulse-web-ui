@@ -23,10 +23,9 @@
         /** @ngInject */
         function SidenavViewController($state, $scope, $stateParams, Database, Term, Profile, Corpus, Language,
                                        filterDb, filterTerm, filterQuery, filterDateRange, filterProfile, filterIndex,
-                                       filterSentiment, filterLanguage, filterDistance, filterDateRangeWithHour) {
+                                       filterSentiment, filterLanguage, filterDistance, filterDateRangeWithHour,
+                                       filterLimitResults) {
             var sidenavViewVm = this;
-
-
 
             $scope.range = function(min, max, step) {
                 step = step || 1;
@@ -48,6 +47,7 @@
             sidenavViewVm.filterLanguage = filterLanguage;
             sidenavViewVm.filterDistance = filterDistance;
             sidenavViewVm.filterDateRangeWithHour = filterDateRangeWithHour;
+            sidenavViewVm.filterLimitResults = filterLimitResults;
 
             // available data visualizations
             sidenavViewVm.viz = [
@@ -66,9 +66,9 @@
                 {group: 'Topic kmeans', id: 'cluster-bar', name: 'Bar Chart', filters: [filterDb, filterTerm, filterQuery, filterDateRange, filterSentiment, filterLanguage, filterDistance]},
                 {group: 'Personal Data', id: 'personaldatasource-pie', name: 'Source Stat Pie Chart', filters: [filterDb]},
                 {group: 'Personal Data', id: 'personaldatagps-map', name: 'GPS Map', filters: [filterDb, filterDateRangeWithHour, filterDistance]},
-                {group: 'Personal Data', id: 'personaldataappinfo-bar', name: 'App Bar Chart', filters: [filterDb, filterDateRange]},
+                {group: 'Personal Data', id: 'personaldataappinfo-bar', name: 'App Bar Chart', filters: [filterDb, filterDateRange, filterLimitResults]},
                 {group: 'Personal Data', id: 'personaldatanetstat-bar', name: 'NetStat Bar Chart', filters: [filterDb, filterDateRangeWithHour]},
-                {group: 'Personal Data', id: 'personaldatacontact-bar', name: 'Contact Bar Chart', filters: [filterDb]},
+                {group: 'Personal Data', id: 'personaldatacontact-bar', name: 'Contact Bar Chart', filters: [filterDb, filterLimitResults]},
                 {group: 'Personal Data', id: 'personaldatadisplay-bar', name: 'DisplayStat Bar Chart', filters: [filterDb, filterDateRangeWithHour]},
                 {group: 'Personal Data', id: 'personaldataappinfo-timeline', name: 'App Timeline', filters: [filterDb, filterDateRange]},
                 {group: 'Personal Data', id: 'personaldatanetstat-timeline', name: 'NetStat Timeline', filters: [filterDb, filterDateRangeWithHour]},
@@ -151,6 +151,7 @@
             sidenavViewVm.params.lat = $stateParams.lat;
             sidenavViewVm.params.lng = $stateParams.lng;
             sidenavViewVm.params.ray = $stateParams.ray;
+            sidenavViewVm.params.limitResults = $stateParams.limitResults;
 
             // when the type of filter or the database changes, remove the query parameters
             $scope.$watchGroup(['sidenavViewVm.params.filterOn', 'sidenavViewVm.params.database'],
@@ -178,7 +179,8 @@
                     language: newParams.language,
                     lat: newParams.lat,
                     lng: newParams.lng,
-                    ray: newParams.ray
+                    ray: newParams.ray,
+                    limitResults: newParams.limitResults
                 };
                 newStateParams.from = newParams.fromDate ? newParams.fromDate.toISOString() : null;
                 newStateParams.to = newParams.toDate ? newParams.toDate.toISOString() : null;

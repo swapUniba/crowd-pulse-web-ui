@@ -18,7 +18,7 @@
       })
 
       .state('app.view', {
-        url: '/view?chartType&db&from&to&filter&search&users&corpus&index&indexType&engine&topic&sentiment&language&lat&lng&ray',
+        url: '/view?chartType&db&from&to&filter&search&users&corpus&index&indexType&engine&topic&sentiment&language&lat&lng&ray&limitResults',
         reloadOnSearch: false,
         templateUrl: 'app/view/index.html',
         controller: 'ViewIndexController',
