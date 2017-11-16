@@ -672,7 +672,8 @@
                 db: vm.params.database,
                 from: vm.params.fromDate,
                 to: vm.params.toDate,
-                limitResults: vm.params.limitResults
+                limitResults: vm.params.limitResults,
+                groupByCategory: vm.params.groupByCategory
             };
             return Stat.PersonalDataAppInfoBar.getList(filter);
         };
@@ -961,7 +962,8 @@
             return getStatPersonalDataAppInfoBar()
                 .then(mapStatToBar)
                 .then(function (stats) {
-                    vm.stat = buildPersonalDataBar("Package Name", stats[0],
+                    var title = vm.params.groupByCategory ? "Categories" : "Package Name";
+                    vm.stat = buildPersonalDataBar(title, stats[0],
                         "Total Foreground Time (in milliseconds)", stats[1]);
                 });
         };

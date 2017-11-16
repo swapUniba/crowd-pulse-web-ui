@@ -20,6 +20,8 @@
     .constant('filterLanguage', 'L')
     .constant('filterDistance', 'DI')
     .constant('filterDateRangeWithHour', 'H')
-    .constant('filterLimitResults', 'LI');
+    .constant('filterLimitResults', 'LI')
+    .constant('groupByCategory', 'GC');
+
 
 })();

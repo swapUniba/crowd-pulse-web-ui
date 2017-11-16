@@ -72,6 +72,11 @@
                     <input type="number" flex ng-model="sidenavViewVm.params.limitResults">
                 </md-input-container>
 
+                <md-checkbox ng-model="sidenavViewVm.params.groupByCategory"
+                             ng-if="sidenavViewVm.hasParam(sidenavViewVm.groupByCategory)">
+                    Group By Category
+                </md-checkbox>
+
                 <md-input-container ng-if="sidenavViewVm.hasParam(sidenavViewVm.filterTerm)">
                     <label>Filter on</label>
                     <md-select flex ng-model="sidenavViewVm.params.filterOn">
