@@ -9,7 +9,7 @@
                 <label>Please select a device</label>
                 <md-select ng-change="vm.onDeviceIdSelected()" ng-model="vm.selectedDeviceId">
                     <md-option  ng-value="device.deviceId" ng-repeat="device in user.devices">
-                        {{ device.deviceId }}
+                        ID: {{ device.deviceId }} - {{ device.brand }} - {{ device.model }}
                     </md-option>
                 </md-select>
             </md-input-container>
