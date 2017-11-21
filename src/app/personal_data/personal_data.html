@@ -75,6 +75,14 @@
                                            ng-true-value="'1'" ng-false-value="'0'">
                                     Share
                                 </md-switch>
+
+                                <md-switch ng-if="key == 'readActivity'"
+                                           ng-model="vm.selectedDeviceConfig.shareActivity"
+                                           ng-change="vm.onSwitchPressed()"
+                                           aria-label="privacy"
+                                           ng-true-value="'1'" ng-false-value="'0'">
+                                    Share
+                                </md-switch>
                             </dib>
 
                             <div flex="60">
@@ -154,6 +162,27 @@
                                     </div>
                                     <div ng-if="vm.selectedDeviceConfig[key] == 0" flex="20" layout layout-margin layout-align="center center">
                                         <span class="md-body-1">don't get contact data</span>
+                                    </div>
+                                    <div flex="10">
+                                        <md-button ng-click="vm.openDialog($event, key)">
+                                            <md-icon>info_outline</md-icon>
+                                        </md-button>
+                                    </div>
+                                </div>
+
+                                <!-- slider for activity type data -->
+                                <div ng-if="key == 'readActivity'" layout="row">
+                                    <md-slider flex="70"
+                                               ng-change="vm.onSliderMoved(key, vm.timeActivity, vm.timeActivityAllowed)"
+                                               md-discrete ng-model="vm.timeActivity"
+                                               step="1" min="1" max="60" aria-label="{{key}}"
+                                               ng-disabled="vm.selectedDeviceConfig[key] == 0">
+                                    </md-slider>
+                                    <div ng-if="vm.selectedDeviceConfig[key] != 0" flex="20" layout layout-margin layout-align="center center">
+                                        <span class="md-body-1">get activity data every {{vm.timeActivity}} minutes</span>
+                                    </div>
+                                    <div ng-if="vm.selectedDeviceConfig[key] == 0" flex="20" layout layout-margin layout-align="center center">
+                                        <span class="md-body-1">don't get activity data</span>
                                     </div>
                                     <div flex="10">
                                         <md-button ng-click="vm.openDialog($event, key)">

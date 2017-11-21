@@ -5,12 +5,31 @@ Crowd Pulse Web Application.
 
 ------------------
 
+## Requirements
+
+Install NodeJS with the following commands:
+
+```
+sudo apt-get update -y
+sudo apt-get install -y build-essential
+curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo apt-get install libkrb5-dev
+```
+
 ## Installation
 
 Run the following commands:
 - `npm install`
 - `npm install -g bower`
 - `bower install`
+
+### Change the leaflet library
+The current version of leaflet is not working properly. Download the development 
+release [here](http://leafletjs.com/download.html) (currently 1.2-dev) and copy all main folder files in 
+`bower_components/leaflet` directory.
+
+This issue could be resolved automatically when a new version of the library is released by the authors.
 
 ## Configuration
 
@@ -38,5 +57,6 @@ does not exist:
 ## Run
 
 Before running you need to build a release with Gulp. In the main directory run `sudo gulp`.
+If the command is not found from the terminal, install gulp with `sudo npm install -g gulp`.
 
-To execute the application, run `node ./bin/crowd-pulse-web-ui.js`.
+To execute the application, run `sudo node ./bin/crowd-pulse-web-ui.js`.

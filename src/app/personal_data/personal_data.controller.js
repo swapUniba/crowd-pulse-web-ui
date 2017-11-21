@@ -26,7 +26,6 @@
                         vm.selectedDeviceConfig = $scope.user.deviceConfigs[i];
                         socketLogin();
                         setUpTimestamps();
-                        console.log(vm.selectedDeviceConfig);
                         break;
                     }
                 }
@@ -37,7 +36,6 @@
             for (var i = 0; i < $scope.user.deviceConfigs.length; i++) {
                 if ($scope.user.deviceConfigs[i].deviceId === vm.selectedDeviceId) {
                     $scope.user.deviceConfigs[i] = vm.selectedDeviceConfig;
-                    console.log(vm.selectedDeviceConfig);
                     break;
                 }
             }
@@ -84,6 +82,9 @@
                 case "readAppInfo":
                     vm.timeAppInfo = ngModelData;
                     break;
+                case "readActivity":
+                    vm.timeActivity = ngModelData;
+                    break;
             }
         };
 
@@ -93,6 +94,7 @@
             response.timeReadAccounts = vm.timeAccounts * (3600 * 1000);
             response.timeReadNetStats = vm.timeNetStats * (3600 * 1000);
             response.timeReadContact  = vm.timeContact  * (3600 * 1000);
+            response.timeReadActivity = vm.timeActivity * (60 * 1000);
             response.client = "web-ui";
             personalDataSocket.emit("config", response);
         };
@@ -134,6 +136,9 @@
                 case "readAppInfo":
                     infoText = "Information about the applications installed on the device.";
                     break;
+                case "readActivity":
+                    infoText = "The activity of the user (if he is on vehicle, bicycle, on foot, etc).";
+                    break;
             }
             $mdDialog.show(
                 $mdDialog.alert()
@@ -169,6 +174,7 @@
           vm.timeAccounts = parseInt(vm.selectedDeviceConfig.timeReadAccounts) / (3600 * 1000);
           vm.timeNetStats = parseInt(vm.selectedDeviceConfig.timeReadNetStats) / (3600 * 1000);
           vm.timeContact = parseInt(vm.selectedDeviceConfig.timeReadContact) / (3600 * 1000);
+          vm.timeActivity = parseInt(vm.selectedDeviceConfig.timeReadActivity)  / (60 * 1000);
         };
 
 
@@ -184,7 +190,6 @@
                 vm.onSwitchPressed();
                 setUpTimestamps();
 
-                console.log("New configuration coming from smartphone");
             } else if (response.config.deviceId === vm.selectedDeviceId) {
                 showToast(response.description);
             }
@@ -208,13 +213,15 @@
         vm.timeNetStats = null;
         vm.timeDisplay = null;
         vm.timeContact = null;
+        vm.timeActivity = null;
 
-        vm.timeGPSAllowed = [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60];  //minutes
-        vm.timeAccountsAllowed = [1, 2, 3, 4, 6, 8, 12, 24];             //hour
-        vm.timeAppInfoAllowed = [];                                      //no value
-        vm.timeNetStatsAllowed = [1, 2, 3, 4, 6, 8, 12, 24];             //hour
-        vm.timeDisplayAllowed = [];                                      //no value
-        vm.timeContactAllowed = [1, 2, 3, 4, 6, 8, 12, 24];              //hour
+        vm.timeGPSAllowed = [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60];         //minutes
+        vm.timeActivityAllowed = [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60];    //minutes
+        vm.timeAccountsAllowed = [1, 2, 3, 4, 6, 8, 12, 24];                    //hour
+        vm.timeAppInfoAllowed = [];                                             //no value
+        vm.timeNetStatsAllowed = [1, 2, 3, 4, 6, 8, 12, 24];                    //hour
+        vm.timeDisplayAllowed = [];                                             //no value
+        vm.timeContactAllowed = [1, 2, 3, 4, 6, 8, 12, 24];                     //hour
     }
 
 })();
