@@ -114,6 +114,13 @@
 
       return {
         'request': function(config) {
+
+          // admin access token (calculated with Web Service token secret)
+          // change this default value in production mode
+          config.headers['x-access-token'] = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLml0I' +
+              'iwidXNlcm5hbWUiOiJhZG1pbiIsImp0aSI6Ijk1ZTJjMmFhLTAzNjEtNGJmYi04ZTdjLTNjZjg2ZDg5ZWViNSIsImlhdCI6MTUxNj' +
+              'YxNzI3NiwiZXhwIjoxNTE2NjIwODc2fQ.SMO53wwIMqdsIrJcUZpp-IN3rGNwDcyNISo2t7AvFf0';
+
           if (requests === 0) {
             $rootScope.$broadcast(toolbarLoadingEvent);
           }
