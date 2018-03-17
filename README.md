@@ -26,10 +26,20 @@ Run the following commands:
 
 ### Change the leaflet library
 The current version of leaflet is not working properly. Download the development 
-release [here](http://leafletjs.com/download.html) (currently 1.2-dev) and copy all main folder files in 
+release [here](http://leafletjs.com/download.html) (currently 1.3.1) and copy all main folder files in 
 `bower_components/leaflet` directory.
 
-This issue could be resolved automatically when a new version of the library is released by the authors.
+From terminal:
+
+```
+ cd bower_components/leaflet
+ 
+ # remove all files in the folder with rm command (eg. rm README.md, ... etc)
+ 
+ wget http://cdn.leafletjs.com/leaflet/v1.3.1/leaflet.zip 
+ unzip leaflet.zip -d ./
+ rm leaflet.zip
+```
 
 ## Configuration
 
